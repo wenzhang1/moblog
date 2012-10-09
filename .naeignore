@@ -3,3 +3,4 @@
 .git
 public/upload
 node_modules/.bin
+config.js
