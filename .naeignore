@@ -1,0 +1,5 @@
+.project
+.gitignore
+.git
+public/upload
+node_modules/.bin

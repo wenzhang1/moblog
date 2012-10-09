@@ -8,7 +8,6 @@ var path = require('path');
 
 exports.config = {
     webname : 'New Node',
-    port : 3000,
     upload_dir : path.join(__dirname, 'public', 'upload', 'imgaes'),
     
     session_secret: 'newnode',
@@ -16,5 +15,5 @@ exports.config = {
     //超级管理员
 	admins: {admin: true},
 
-    db : 'mongodb://127.0.0.1/newnode'
+    db : 'mongodb://KtBiw8anWTRL:V4Wu6lmW93@127.0.0.1:20088/GuxIp2vrktmE'
 }
