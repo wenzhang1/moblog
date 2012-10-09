@@ -1,27 +1,20 @@
 /**
  * Module dependencies.
  */
-
 var express = require('express');
 var path = require('path');
 var config = require('./config').config;
 var routes = require('./routes');
 var ndir = require('ndir');
-
-
-
 //创建服务器
 var app = module.exports = express.createServer();
-
 // 定义共享环境
 config.upload_dir = config.upload_dir || path.join(__dirname, 'public', 'upload', 'imgaes');
-
 ndir.mkdir(config.upload_dir, function (err) {
   if (err) {
     throw err;
   }
 });
-
 app.configure(function(){
   //设定模板目录
   var viewsRoot = path.join(__dirname, 'views');
@@ -50,7 +43,6 @@ app.configure(function(){
     csrf(req, res, next);
   });
 });
-
 //定义locals变量
 app.helpers({
     config: config
@@ -60,12 +52,10 @@ app.dynamicHelpers({
 	return req.session ? req.session._csrf : '';
     }
 });
-
 var maxAge = 1000 * 60; 
 app.use('/upload/', express.static(config.upload_dir, { maxAge: maxAge }));
 // old image url: http://host/user_data/images/xxxx
 app.use('/user_data/', express.static(path.join(__dirname, 'public', 'user_data'), { maxAge: maxAge }));
-
 var staticDir = path.join(__dirname, 'public');
 //定义开发环境
 app.configure('development', function(){
@@ -78,13 +68,9 @@ app.configure('production', function(){
   app.use(express.errorHandler());
   app.use('view cache',true);
 });
-
-
 // Routes
 routes(app);
-
-var port = (process.env.VMC_APP_PORT || 80);
-var host = (process.env.VCAP_APP_HOST || 'localhost');
-app.listen(port, host, function(){
+var port = config.port;
+app.listen(port, function(){
   console.log("Express server listening on port %d in %s mode", port, app.settings.env);
 });
