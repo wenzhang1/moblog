@@ -1,0 +1,13 @@
+{
+    "name": "application-name"
+  , "version": "0.0.1"
+  , "private": true
+  , "dependencies": {
+     "mongoose": ">= 2.4.1"
+     ,"express": "2.5.10"
+     ,"ejs": ">= 0.0.1"
+     ,"validator": "0.3.7"
+     ,"eventproxy": ">=0.1.0"
+     ,"ndir": "0.1.2"
+  }
+}

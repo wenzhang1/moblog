@@ -1,0 +1,19 @@
+<section class="reply2_inner_box">
+	<header class="clearfix">
+      <span class="reply_author pull-left"><a href="/user_view/<%= reply.author.user_name%>"><%= reply.author.user_name%></a></span>
+      <div class="pull-right">
+         <a href="javascript:void(0);" class="reply_at_btn">@回复</a>
+         <% if(locals.current_user && locals.current_user.is_admin){ %>
+         <a href="/reply_del/<%= reply._id%>">删除</a>
+         <% } %>
+      </div>
+   </header>
+   <p class="reply_content">
+      <%- reply.reply_content%>
+   </p>
+   <footer class="time_box clearfix">
+      <span class="pull-right">
+         回复于：<time pubdate datetime="<%= reply.reply_time%>"><%= reply.reply_time%></time>
+      </span>
+   </footer>
+</section>

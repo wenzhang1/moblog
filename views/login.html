@@ -1,0 +1,37 @@
+<div class="main_left sign_container span8">
+	<header class="clearfix create_btn">
+		<h2 class="pull-left"><i class="icon-user"></i>登录</h2>
+		<a class="pull-right" href="/user_add">
+			<button class="btn">
+				注册
+			</button>
+		</a>
+	</header>
+	<div class="sign_inner">
+		<%if(locals.error){%>
+		<div class="alert alert-error">
+			<a class="close" data-dismiss="alert" href="#">x</a>
+			<%= error %>
+		</div>
+		<%}%>
+		<form class="form-horizontal" action="/login" method="post">
+		    <input type="hidden" name="_csrf" value="<%= _csrf %>" />
+		    <div class="control-group">
+			    <label for="user_name" class="control-label">用户名：</label>
+			    <div class="controls">
+			    	<input class="input-xlarge" type="text" id="user_name" name="user_name" placeholder="用户名..." value="" />
+			    </div>
+		    </div>
+		    <div class="control-group">
+		    	<label for="password" class="control-label">密码：</label>
+			    <div class="controls">
+			    	<input class="input-xlarge" type="password" id="password" name="password" placeholder="密码..." value="" />
+			    </div>
+		    </div>
+		    <div class="form-actions">
+		    	 <input class="btn" type="submit" value="登录" />
+		    </div>
+		</form>
+	</div>
+</div>
+<%- partial('side_bar') %>

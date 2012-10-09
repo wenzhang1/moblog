@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head>
+<title>SyntaxHighlighter Build Test Page</title>
+<meta charset=UTF-8>
+<script type="text/javascript" src="sh.js"></script>
+<link rel="stylesheet" type="text/css" href="sh.css">
+<style type="text/css">body{font-size:12px;}</style>
+</head>
+<body>
+<pre class="brush: php">
+switch($_GET['q'])
+{
+	case 'login':
+		$user = load_class('user');
+		$result = $user->login($_POST);
+		if($result === true)
+		{
+		$res['status'] = 0;
+		}
+		else
+		{
+		$res['error'] = $user->error;
+		}
+	break;
+}
+</pre>
+</body>
+</html>

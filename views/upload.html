@@ -1,0 +1,16 @@
+<h2>上传图片</h2>
+<form method="post" enctype="multipart/form-data" action="/article/501f8d69bd7ddebe53000002/edit" name="user_action">
+	<input type="hidden" name="user_action" value="uploadImg" />
+	<input type="file" name="imgFile" />
+	<textarea name="content" id="content" cols="90" rows="15"></textarea>
+	<input type="submit" value="上传" />
+</form>
+
+
+
+<script>
+    var editor;
+    KindEditor.ready(function(K) {
+            editor = K.create('#content');
+    });
+</script>

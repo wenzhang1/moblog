@@ -1,0 +1,187 @@
+<header>
+   <nav class="tag_list">
+      <ul class="nav nav-pills">
+			<% if(locals.current_user){ %>
+				<% if(locals.current_user.is_admin){ %>
+					<li>
+						<a href="/tags" title="编辑标签"><i class="icon-pencil"></i></a>
+					</li>
+				<% } %>
+			<% } %>
+		   	<% if(locals.tags){ %>
+   			<% locals.tags.forEach(function(tag){ %>
+   				<li>
+   					<a href="/tag/<%= tag._id%>"><%= tag.name%></a>
+   				</li>
+   			<% }) %>
+			<% }else{ %>
+			   暂无标签
+			<% } %>
+		</ul>
+   </nav>
+</header>
+<% if(article){ %>
+<div class="main_left article_container span8">
+   <article id="article_content">
+      <header class="clearfix create_btn">
+         <h2 class="pull-left"><i class="icon-book"></i><span><%= article.title%></span></h2>
+      </header>
+	<% if(locals.current_user){ %>
+		<% if(locals.current_user.is_admin || locals.current_user.user_name == article.author.user_name){ %>
+			<div class="pull-right article_opera">
+				<a href="/article_edit/<%= article._id%>" title="修改"><i class="icon-pencil"></i></a>
+				<a href="/article_del/<%= article._id%>" title="删除"><i class="icon-trash"></i></a>
+			</div>
+		<% } %>
+	<% } %>
+      <section>
+         <p>
+            <%- article.content%>
+         </p>
+      </section>
+      <footer>
+         <div class="author_box clearfix">
+            <span> 发表者： <a href="" target="_blank"><%= article.author.user_name%></a> </span>
+            <span class="time_box pull-right">发表于：
+               <time pubdate datetime="<%= article.create_at%>">
+                  <%= article.create_at%>
+               </time> </span>
+         </div>
+         <div class="tag_include">
+         	<i class="icon-tags"></i>
+            <% if(article.tags && article.tags.length>0){ %>
+               <% article.tags.forEach(function(tag){ %>
+                  <a href="" target="_blank"><%= tag.name %></a>
+               <% }) %>
+            <% }else{ %>
+               <a>暂无标签</a>
+            <% } %>
+         </div>
+      </footer>
+      <article id="reply_list">
+         <header class="clearfix create_btn">
+            <h2 class="pull-left"><i class="icon-comment"></i>评论列表</h2>
+         </header>
+         <% if(article.replies.length>0){ %>
+         <%- partial('reply/reply', article.replies) %>
+         <% }else{ %>
+     	<section class="reply_inner_box">
+     		此文章下暂无评论
+     	</section>
+         <% } %>
+         <div class="add_reply create_btn">
+            <h2><i class="icon-comment"></i>发表评论：</h2>
+            <form class="clearfix" action="/<%=article._id %>/reply" method="post">
+               <input type="hidden" name="_csrf" value="<%= _csrf%>" />
+               <textarea class="reply_textarea" name="reply_content" id="reply_content"></textarea>
+               <input class="btn pull-right" type="submit" value="发表评论">
+            </form>
+         </div>
+      </article>
+   </article>
+</div>
+<% } %>
+
+<script>
+    //装载编辑器
+      var reply_ids = [];
+      for(var i = 0; i<$('.reply_area').length; i++){
+         var id = $('.reply_area:eq('+ i +')').attr('id');
+         reply_ids.push(id);
+      }
+    window.editorMap = {};
+    var editor;
+    KindEditor.ready(function(K) {
+      for(var i = 0; i<reply_ids.length; i++){
+            editorMap[reply_ids[i]] = K.create('#reply_' + reply_ids[i],{
+            items : ['source', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+                  'code', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+                  'insertunorderedlist', '|', 'emoticons', 'image', 'link'],
+            afterCreate: function(){
+               this.sync();
+            },
+            afterChange: function(){
+               this.sync();
+            },
+            afterBlur: function(){
+               this.sync();
+            },
+         });
+       }
+       editor = K.create('#reply_content',{
+            items : ['source', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+               'code', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+               'insertunorderedlist', '|', 'emoticons', 'image', 'link'],
+         afterCreate: function(){
+            this.sync();
+         },
+         afterChange: function(){
+            this.sync();
+         },
+         afterBlur: function(){
+            this.sync();
+         },
+       });
+    });
+    $('.reply2_submit_btn').click(function(){
+      var $btn = $(this);
+      var reply_id = $btn.parent().attr('id');
+      var reply2_content = $btn.parent().find('.reply_textarea').val();
+      var this_editor = editorMap[reply_id].sync();
+      if(reply2_content == ''){
+         alert('评论的内容不能为空');
+      }
+      var data = {
+         reply_id: reply_id,
+         r2_content: reply2_content,
+         _csrf: '<%- _csrf %>'
+      };
+      $.post('/<%=article._id %>/reply_2', data, function(data){
+         if(data == '请登录后再发表评论' || data == '要评论的文章不存在或被删除' || data == '评论的内容不能为空'){
+            alert(data);
+         }else if(data != ''){
+            $btn.parent().before(data);
+            this_editor.html('');
+            $btn.parents('.reply_area').hide();
+         }
+      });
+    });
+    
+    $('.reply_at_btn').click(function(){
+      var $btn = $(this);
+      var editor_box = $btn.parents('.reply_inner_box').find('.reply_area');
+      var user_html = $btn.parent().parent().find('.reply_author').html();
+      var reply_box_id = $btn.parents('.reply_inner_box').find('.reply_area').attr('id');
+      editor_box.toggle('fast');
+      var this_editor = editorMap[reply_box_id].sync();
+      var html = this_editor.html();
+      this_editor.focus();
+      if(html == '' || html == '<br />' || html == '<br/>'){
+         this_editor.html('');
+         this_editor.html('@' + user_html + '<br />');
+      }else{
+         this_editor.html('');
+      }
+      return false;
+    });
+    
+    $('.reply2_at_btn').click(function(){
+      var $btn = $(this);
+      var editor_box = $btn.parents('.reply2_box').find('.reply_area');
+      var user_html = $btn.parent().find('.reply_author').html();
+      var reply_box_id = $btn.parents('.reply_inner_box').find('.reply_area').attr('id');
+      editor_box.toggle('fast');
+      var this_editor = editorMap[reply_box_id].sync();
+      var html = this_editor.html();
+      this_editor.focus();
+      if(html == '' || html == '<br />' || html == '<br/>'){
+         this_editor.html('');
+         this_editor.html('@' + user_html + '<br />');
+      }else{
+         this_editor.html('');
+      }
+      return false;
+    });
+</script>
+
+<%- partial('side_bar') %>

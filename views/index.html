@@ -1,0 +1,89 @@
+<header>
+	<nav class="tag_list">
+		<ul class="nav nav-pills">
+			<% if(locals.current_user){ %>
+				<% if(locals.current_user.is_admin){ %>
+					<li>
+						<a href="/tags" title="编辑标签"><i class="icon-pencil"></i></a>
+					</li>
+				<% } %>
+			<% } %>
+		   	<% if(locals.tags){ %>
+   			<% locals.tags.forEach(function(tag){ %>
+   				<li>
+   					<a href="/tag/<%= tag._id%>"><%= tag.name%></a>
+   				</li>
+   			<% }) %>
+			<% }else{ %>
+			   暂无标签
+			<% } %>
+		</ul>
+	</nav>
+</header>
+<div class="main_left article_list span8">
+	<header class="clearfix create_btn">
+		<h2 class="pull-left"><i class="icon-list"></i>文章列表</h2>
+		<a class="pull-right" href="/article_create">
+			<button class="btn">
+				发表文章
+			</button>
+		</a>
+	</header>
+	<% articles.forEach(function(article){ %>
+	<article>
+		<header>
+			<h3><i class="icon-book"></i><span><a href="/article_view/<%= article._id%>"><%= article.title %></a></span></h3>
+			<div class="author_box">
+				<span> 发表者： <a href="/user_view/<%=article.author.user_name %>" target="_blank"><%=article.author.user_name %></a> </span>
+				<span class="time_box">发表于：
+					<time pubdate datetime="<%=article.create_at %>">
+						<%=article.create_at %>
+					</time>
+				</span>
+				<% if(locals.current_user){ %>
+					<% if(locals.current_user.is_admin || locals.current_user.user_name == article.author.user_name){ %>
+					<div class="pull-right article_opera">
+						<a href="/article_edit/<%= article._id%>" title="修改"><i class="icon-pencil"></i></a>
+						<a href="/article_del/<%= article._id%>" title="删除"><i class="icon-trash"></i></a>
+					</div>
+					<% } %>
+				<% } %>
+			</div>
+		</header>
+		<section>
+			<%- article.content%>
+		</section>
+		<footer>
+			<div class="tag_include">
+				<i title="所属标签" class="icon-tags"></i>
+				<% if(article.tags && article.tags.length>0){ %>
+					<% article.tags.forEach(function(tag){ %>
+						<a href="/tag/<%= tag._id%>" target="_blank"><%= tag.name%></a>
+					<% }) %>
+				<% }else{ %>
+					<a>暂无标签</a>
+				<% } %>
+			</div>
+			<span><i class="icon-eye-open"></i>点击数：<b><%= article.view_count %></b></span>
+			<span><i class="icon-comment"></i>评论：<b><%= article.reply_count%></b></span>
+			<% if(article.reply_count > 0){ %>
+			<span class="last_reply_time pull-right"> 最后回复于： <a href="" target="_blank"><%= article.reply.author.user_name%></a>
+				<time pubdate datetime="<%= article.last_reply_time%>">
+					<%= article.last_reply_time%>
+				</time>
+			</span>
+			<%}%>
+		</footer>
+	</article>
+	<% }) %>
+	<div class="pagination pull-right">
+		<% var pages_url = base_url + '?' + 'page='; %>
+		<%- partial('page_layout', {
+			pages: pages,
+			pages_url: pages_url,
+			current_page: current_page
+		}) %>
+	</div>
+</div>
+
+<%- partial('side_bar') %>

@@ -1,0 +1,21 @@
+<div class="main_left sign_container span8">
+	<header class="clearfix create_btn">
+		<h2 class="pull-left"><i class="icon-info-sign"></i>
+			<% if(locals.error){ %>错误信息<% } %>
+			<% if(locals.success){ %>成功信息<% } %>
+		</h2>
+	</header>
+	<div class="sign_inner">
+		<%if(locals.error){%>
+		<div class="alert alert-error">
+			<%= error %>
+		</div>
+		<%}%>
+		<%if(locals.success){%>
+		<div class="alert alert-success">
+			<%= success %>
+		</div>
+		<%}%>
+	</div>
+</div>
+<%- partial('side_bar') %>

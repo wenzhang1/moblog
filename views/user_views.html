@@ -1,0 +1,87 @@
+<div class="main_left span8">
+	<header class="clearfix create_btn">
+		<h2 class="pull-left"><i class="icon-tags"></i>用户列表</h2>
+	</header>
+	<div class="tags_inner">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>
+						用户名
+					</th>
+					<th>
+						邮箱
+					</th>
+					<th>
+						创建时间
+					</th>
+					<th>
+						最后修改时间
+					</th>
+					<th>
+						修改人
+					</th>
+					<th>
+						编辑
+					</th>
+					<th>
+						删除
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% if(users && users.length > 0){ %>
+					<% users.forEach(function(user){ %>
+						<tr>
+							<td>
+								<p><a href="/user_view/<%=user.user_name %>"><%=user.user_name %></a></p>
+							</td>
+							<td>
+								<p><%=user.email %></p>
+							</td>
+							<td>
+								<time pudate datetime="<%=user.create_at %>"><%=user.create_at %></time>
+							</td>
+							<td>
+								<time pudate datetime="<%=user.update_time%>"><%=user.update_time%></time>
+							</td>
+							<td>
+								<% if(user.edit){ %>
+									<%=user.edit.user_name%>
+								<% }else{ %>
+									无
+								<% } %>
+							</td>
+							<td>
+								<a href="/change_password/<%=user._id%>" title="编辑用户"><i class="icon-pencil"></i></a>
+							</td>
+							<td>
+								<a href="/del_user/<%=user._id%>" title="删除" class="del_user"><i class="icon-trash"></i></a>
+							</td>
+						</tr>
+					<% }) %>
+				<% } %>
+			</tbody>
+		</table>
+		<div class="pagination pull-right">
+			<% var pages_url = base_url + '?' + 'page='; %>
+			<%- partial('page_layout', {
+				pages: pages,
+				pages_url: pages_url,
+				current_page: current_page
+			}) %>
+		</div>
+	</div>
+</div>
+<script>
+//删除标签
+	 $(document).ready(function(){
+	 	$('.del_user').click(function(){
+	 		if(confirm('确认要删除此用户吗？用户发表的文章都会被删除!')){
+	 			window.location.href = $(this).attr('href');
+	 		}
+	 		return false;
+	 	});
+	 });
+</script>
+<%- partial('side_bar') %>

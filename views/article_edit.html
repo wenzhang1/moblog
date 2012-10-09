@@ -1,0 +1,113 @@
+<header>
+   <nav class="tag_list">
+      <ul class="nav nav-pills">
+			<% if(locals.current_user){ %>
+				<% if(locals.current_user.is_admin){ %>
+					<li>
+						<a href="/tags" title="编辑标签"><i class="icon-pencil"></i></a>
+					</li>
+				<% } %>
+			<% } %>
+		   	<% if(locals.tags){ %>
+   			<% locals.tags.forEach(function(tag){ %>
+   				<li>
+   					<a href="/tag/<%= tag._id%>"><%= tag.name%></a>
+   				</li>
+   			<% }) %>
+			<% }else{ %>
+			   暂无标签
+			<% } %>
+		</ul>
+   </nav>
+</header>
+<div class="main_left span8">
+	<header class="create_btn">
+		<h2><i class="icon-edit"></i><% if(locals.action && locals.action == 'article_edit'){ %>修改文章<% }else{ %>发表文章<% } %></h2>
+	</header>
+	<div class="article_create_inner clearfix">
+		<% if(locals.error){ %>
+			<div class="alert alert-error">
+				<a class="close" data-dismiss="alert" href="#">x</a>
+				<%= error %>
+			</div>
+		<% } %>
+		<% if(locals.action && locals.action == 'article_edit'){ %>
+		<form class="form-horizontal" id="create_article_form" action="/article_edit/<%= article_id%>" method="post">
+		<% }else{ %>
+		<form class="form-horizontal" id="create_article_form" action="/article_create" method="post">
+		<% } %>
+		    <input type="hidden" name="_csrf" value="<%= _csrf%>" />
+		    <% if(locals.tags && locals.tags.length>0){ %>
+		    	<input type="hidden" name="tags_ids" id="tags_ids" value="" />
+		    	<div class="control-group">
+		    		<label class="control-label">选择标签：</label>
+		    		<div class="controls">
+			    		<% tags.forEach(function(tag){ %>
+			    			<% if(tag.is_selected){%>
+			    				<span tag_id="<%= tag._id%>" class="tag_box btn btn-mini active"><%= tag.name%></span>
+			    			<% }else{ %>
+			    				<span tag_id="<%= tag._id%>" class="tag_box btn btn-mini"><%= tag.name%></span>
+			    			<% } %>
+						<% })%>
+		    		</div>
+				</div>
+		    <% } %>
+		    <% if(locals.article_id){ %>
+		    <input type="hidden" name="article_id" value="<%= article_id%>" />
+			<% } %>
+			<% if(locals.title){ %>
+			<div class="control-group">
+			    <label for="user_name" class="control-label">文章名称：</label>
+			    <div class="controls">
+			    	<input class="input-xlarge" type="text" id="title" name="title" value="<%= title%>" />
+			    </div>
+		    </div>
+		    <% }else{ %>
+		    <div class="control-group">
+			    <label for="user_name" class="control-label">文章名称：</label>
+			    <div class="controls">
+			    	<input class="input-xlarge" type="text" id="title" name="title" placeholder="文章名称..." value="" />
+			    </div>
+		    </div>
+		    <% } %>
+		    <div class="control-group">
+			    <label class="control-label">文章名称：</label>
+			    <div class="controls">
+			    	<textarea id="content" name="content" class="input-xlarge" style="width: 500px; height: 300px;"><% if(locals.content){ %><%= content%><% }else{ %><% } %></textarea>
+			    </div>
+		    </div>
+		    <input type="submit" id="submit_btn" class="btn pull-right" value="发表文章" />
+		</form>
+	</div>
+</div>
+
+<%- partial('side_bar') %>
+<script>
+   //装载编辑器
+  
+    var editor;
+    KindEditor.ready(function(K) {
+            editor = K.create('#content',{
+            	items : ['source', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+						'code', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+						'insertunorderedlist', '|', 'emoticons', 'image', 'link', 'preview']
+            });
+    });
+    
+    $(function(){
+    	$('.tag_box').click(function(){
+    		$(this).toggleClass('active');
+    	});
+    	
+    	$('#submit_btn').click(function(){
+    		var values=[];
+		    $('.tag_box').each(function(){
+				if($(this).hasClass('active')){
+					values.push($(this).attr('tag_id'));
+				}
+			 });
+		    $('#tags_ids').val(values);
+		    $('#create_article_form').submit();
+    	});
+    });
+</script>
