@@ -1,6 +1,7 @@
 {
     "name": "application-name"
   , "version": "0.0.1"
+  , "main": "./app.js"
   , "private": true
   , "dependencies": {
      "mongoose": ">= 2.4.1"
