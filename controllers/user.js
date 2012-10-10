@@ -96,6 +96,9 @@ exports.user_view = function(req, res, next){
 		
 		articleCtrl.get_articles_by_query({author_id: user._id},{limit: 5, sort: [ ['create_time', 'desc'] ]}, function(err, articles){
 			if(err) return next(err);
+			
+			Util.article_tran(articles);
+			
 			proxy.trigger('new_articles', articles);
 		});
 		
@@ -109,6 +112,8 @@ exports.user_view = function(req, res, next){
 			var where = {_id: {'$in': article_ids}};
 			articleCtrl.get_articles_by_query(where, {}, function(err, articles){
 				if(err) return next(err);
+				
+				Util.article_tran(articles);
 				
 				proxy.trigger('new_replies', articles);
 			});

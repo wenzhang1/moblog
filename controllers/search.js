@@ -12,6 +12,7 @@ var userCtrl = require('./user');
 var tagCtrl = require('./tag');
 var replyCtrl = require('./reply');
 var url = require('url');
+var Util = require('../libs/utils');
 
 exports.search_list = function(req, res, next){
 	var current_page = parseInt(req.query.page, 10) || 1;
@@ -45,6 +46,8 @@ exports.search_list = function(req, res, next){
 	
 	articleCtrl.get_articles_by_query(where, opt, function(err, articles){
 		if(err) return next(err);
+		
+		Util.article_tran(articles);
 		
 		proxy.trigger('articles', articles);
 	});

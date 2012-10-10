@@ -6,7 +6,7 @@
 var path = require('path');
 
 exports.config = {
-    webname : 'New Node',
+    webname : 'Mo Blog',
     port : 3000,
     upload_dir : path.join(__dirname, 'public', 'upload', 'imgaes'),
     

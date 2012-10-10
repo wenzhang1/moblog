@@ -78,19 +78,22 @@
 									<%=new_article.create_at %>
 								</time>
 							</span>
-							<div class="tag_include pull-right">
-								<i class="icon-tags"></i>
-								<% if(new_article.tags && new_article.tags.length>0){ %>
-									<% new_article.tags.forEach(function(tag){ %>
-										<a href="/tag/<%= tag._id%>" target="_blank"><%= tag.name%></a>
-									<% }) %>
-								<% }else{ %>
-									<a>暂无标签</a>
-								<% } %>
-							</div>
 						</div>
 					</header>
+					<section>
+						<%- new_article.content%>
+					</section>
 					<footer>
+						<div class="tag_include">
+							<i class="icon-tags"></i>
+							<% if(new_article.tags && new_article.tags.length>0){ %>
+								<% new_article.tags.forEach(function(tag){ %>
+									<a href="/tag/<%= tag._id%>" target="_blank"><%= tag.name%></a>
+								<% }) %>
+							<% }else{ %>
+								<a>暂无标签</a>
+							<% } %>
+						</div>
 						<span><i class="icon-eye-open"></i>点击数：<b><%= new_article.view_count %></b></span>
 						<span><i class="icon-comment"></i>评论：<b><%= new_article.reply_count%></b></span>
 						<% if(new_article.reply_count > 0){ %>
@@ -136,19 +139,22 @@
 									<%=replies_article.create_at %>
 								</time>
 							</span>
-							<div class="tag_include pull-right">
-								<i class="icon-tags"></i>
-								<% if(replies_article.tags && replies_article.tags.length>0){ %>
-									<% replies_article.tags.forEach(function(tag){ %>
-										<a href="/tag/<%= tag._id%>" target="_blank"><%= tag.name%></a>
-									<% }) %>
-								<% }else{ %>
-									<a>暂无标签</a>
-								<% } %>
-							</div>
 						</div>
 					</header>
+					<section>
+						<%- replies_article.content%>
+					</section>
 					<footer>
+						<div class="tag_include">
+							<i class="icon-tags"></i>
+							<% if(replies_article.tags && replies_article.tags.length>0){ %>
+								<% replies_article.tags.forEach(function(tag){ %>
+									<a href="/tag/<%= tag._id%>" target="_blank"><%= tag.name%></a>
+								<% }) %>
+							<% }else{ %>
+								<a>暂无标签</a>
+							<% } %>
+						</div>
 						<span><i class="icon-eye-open"></i>点击数：<b><%= replies_article.view_count %></b></span>
 						<span><i class="icon-comment"></i>评论：<b><%= replies_article.reply_count%></b></span>
 						<% if(replies_article.reply_count > 0){ %>

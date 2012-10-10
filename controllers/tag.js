@@ -56,6 +56,8 @@ exports.article_list = function(req, res, next){
 				return;
 			}
 			
+			Util.article_tran(articles);
+			
 			proxy.trigger('articles', articles);
 		});
 		

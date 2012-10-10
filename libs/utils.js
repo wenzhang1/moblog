@@ -14,3 +14,14 @@ exports.format_date = function (date) {
   
   return year + '-' + month + '-' + day + ' ' + hour + ':' + minute;
 };
+
+exports.article_tran = function(a_array){
+	for(var i = 0; i < a_array.length; i++){
+		a_array[i].content = a_array[i].content.replace(/<img[^>]*>/ig, "<p>[图片]</p>");
+		a_array[i].content = a_array[i].content.replace(/<pre\s[^>]*>[\s\S]*?<\/pre>/ig, "<p>[代码]</p>");
+		a_array[i].content = a_array[i].content.replace(/(<([^>]+)>)/gi, "");
+		a_array[i].content = a_array[i].content.replace(/\s*/ig, "");
+		a_array[i].content = a_array[i].content.substr(0, 55);
+		a_array[i].content = a_array[i].content.concat("......");
+	}
+}
