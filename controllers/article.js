@@ -8,6 +8,7 @@ var config = require('../config').config;
 var models = require('../models');
 var Article = models.Article;
 var ArticleTag = models.ArticleTag;
+var Reply = models.Reply;
 var userCtrl = require('./user');
 var tagCtrl = require('./tag');
 var replyCtrl = require('./reply');
@@ -43,10 +44,11 @@ exports.article_create = function(req, res, next){
     if(method == 'post'){
     	var title = sanitize(req.body.title).trim();
     	title = sanitize(title).xss();
-    	var tags_ids = sanitize(req.body.tags_ids).trim();
-    	tags_ids = sanitize(tags_ids).xss();
+    	var tags_ids = req.body.tags_ids;
     	var tags_id_array = [];
-    	if(tags_ids != ''){
+    	if(tags_ids && tags_ids != ''){
+	    	tags_ids = sanitize(tags_ids).trim();
+	    	tags_ids = sanitize(tags_ids).xss();
     		tags_id_array = tags_ids.split(',');
     	}
 		var content = req.body.content;
@@ -105,7 +107,7 @@ exports.article_create = function(req, res, next){
 				userCtrl.get_user_by_query_once({_id: article.author_id}, function(err, user){
 					user.article_count += 1;
 					user.save();
-					req.session.user._id.article_count += 1;
+					req.session.user.article_count += 1;
 				});
 				proxy.after('article_tag_saved', tags_id_array.length, article_tag_save_done);
 				
@@ -216,11 +218,12 @@ exports.article_edit = function(req, res, next){
 			}
 			if(article.author_id == req.session.user._id || req.session.user.is_admin){
 				var title = sanitize(req.body.title).trim();
-				title = sanitize(title).xss();
-				var tags_ids = sanitize(req.body.tags_ids).trim();
-				tags_ids = sanitize(tags_ids).xss();
+				title = sanitize(title).xss();		    	
+		    	var tags_ids = req.body.tags_ids;
 		    	var tags_id_array = [];
-		    	if(tags_ids != ''){
+		    	if(tags_ids && tags_ids != ''){
+			    	tags_ids = sanitize(tags_ids).trim();
+			    	tags_ids = sanitize(tags_ids).xss();
 		    		tags_id_array = tags_ids.split(',');
 		    	}
 				var content = req.body.content;
@@ -397,11 +400,21 @@ function get_article_by_query_once(query, cb){
 			if(err) return cb(err);
 			proxy.trigger('edit', edit);
 		});
-		var reply_where = {_id: article.last_reply_id};
-		replyCtrl.get_reply_by_query_once(reply_where, function(err, replies){
+		
+		Reply.find({article_id: article._id}, [], {limit: 1, sort: [ ['reply_at', 'desc'] ]}, function(err, replies){
 			if(err) return cb(err);
-			
-			proxy.trigger('replies', replies);
+			if(replies.length > 0){
+				userCtrl.get_user_by_query_once({_id: replies[replies.length-1].author_id}, function(err, user){
+					if(err) return cb(err);
+					
+					replies[replies.length-1].author = user;
+					replies[replies.length-1].reply_time = Util.format_date(replies[replies.length-1].reply_at);
+					
+					proxy.trigger('replies', replies[0]);
+				});
+			}else{
+				proxy.trigger('replies', null);
+			}
 		});
 		
 		ArticleTag.find({article_id: article._id}, function(err, articleTags){

@@ -7,6 +7,7 @@
 var config = require('../config').config;
 var models = require('../models');
 var Reply = models.Reply;
+var Article = models.Article;
 var articleCtrl = require('./article');
 var userCtrl = require('./user');
 var EventProxy = require('eventproxy').EventProxy;
@@ -46,7 +47,6 @@ exports.reply_add = function(req, res, next){
 			if(err) return next(err);
 			
 			article.last_reply_at = Date.now();
-			article.last_reply_id = reply._id;
 			article.reply_count += 1;
 			article.save();
 			
@@ -57,7 +57,7 @@ exports.reply_add = function(req, res, next){
 	userCtrl.get_user_by_query_once({_id: reply.author_id}, function(err, user){
 		user.reply_count += 1;
 		user.save();
-		req.session.user._id.reply_count += 1;
+		req.session.user.reply_count += 1;
 		proxy.trigger('user_saved');
 	});
 }
@@ -106,7 +106,6 @@ exports.reply2_add = function(req, res, next){
 			if(err) return next(err);
 			
 			article.last_reply_at = Date.now();
-			article.last_reply_id = reply._id;
 			article.reply_count += 1;
 			article.save();
 			
@@ -142,10 +141,15 @@ exports.reply_del = function(req, res, next){
 			return;
 		}
 		proxy.assign('reply_removed', done);
-		articleCtrl.get_article_by_query_once({_id: reply.article_id}, function(err, article){
+		
+		Article.findOne({_id: reply.article_id}, function(err, article){
 			article.reply_count -= 1;
 			article.save();
 		});
+		
+		reply.author.reply_count -= 1;
+		reply.author.save();
+		
 		reply.remove(function(err){
 			if(err) return next(err);
 			

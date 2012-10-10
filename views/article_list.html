@@ -65,10 +65,10 @@
 			</div>
 			<span><i class="icon-eye-open"></i>点击数：<b><%= article.view_count %></b></span>
 			<span><i class="icon-comment"></i>评论：<b><%= article.reply_count%></b></span>
-			<% if(article.reply_count > 0){ %>
+			<% if(article.reply){ %>
 			<span class="last_reply_time pull-right"> 最后回复于： <a href="" target="_blank"><%= article.reply.author.user_name%></a>
 				<time pubdate datetime="<%= article.last_reply_time%>">
-					<%= article.last_reply_time%>
+					<%= article.reply.reply_time%>
 				</time>
 			</span>
 			<%}%>

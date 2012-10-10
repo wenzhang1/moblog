@@ -93,10 +93,6 @@ body {
 	margin-right: 22px;
 }	
 
-.article_list article section p {
-	text-indent: 24px;
-}
-
 .article_list article footer {
 	color: #666;
 }
@@ -252,9 +248,6 @@ div.tag_include a:hover {
 	padding: 30px 10px 10px 10px;
 }
 
-.article_container #article_content section p {
-	text-indent: 24px;
-}
 #reply_list .add_reply form{
 	margin: 10px;
 	width: 520px;

@@ -96,10 +96,10 @@
 						</div>
 						<span><i class="icon-eye-open"></i>点击数：<b><%= new_article.view_count %></b></span>
 						<span><i class="icon-comment"></i>评论：<b><%= new_article.reply_count%></b></span>
-						<% if(new_article.reply_count > 0){ %>
+						<% if(new_article.reply){ %>
 						<span class="last_reply_time pull-right"> 最后回复于： <a href="" target="_blank"><%= new_article.reply.author.user_name%></a>
 							<time pubdate datetime="<%= new_article.last_reply_time%>">
-								<%= new_article.last_reply_time%>
+								<%= new_article.reply.reply_time%>
 							</time>
 						</span>
 						<%}%>
@@ -157,10 +157,10 @@
 						</div>
 						<span><i class="icon-eye-open"></i>点击数：<b><%= replies_article.view_count %></b></span>
 						<span><i class="icon-comment"></i>评论：<b><%= replies_article.reply_count%></b></span>
-						<% if(replies_article.reply_count > 0){ %>
+						<% if(replies_article.reply){ %>	
 						<span class="last_reply_time pull-right"> 最后回复于： <a href="" target="_blank"><%= replies_article.reply.author.user_name%></a>
 							<time pubdate datetime="<%= replies_article.last_reply_time%>">
-								<%= replies_article.last_reply_time%>
+								<%= replies_article.reply.reply_time%>
 							</time>
 						</span>
 						<%}%>

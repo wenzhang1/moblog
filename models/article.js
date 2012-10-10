@@ -15,7 +15,6 @@ var articleData = {
     create_time: {type : Date, default : Date.now},
     update_at: {type : Date, default : Date.now},
     last_reply_at: {type : Date},
-    last_reply_id: {type : ObjectId},
     reply_count: {type : Number, default : 0},
     edit_id: {type : ObjectId}
 }
