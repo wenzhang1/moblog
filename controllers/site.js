@@ -19,7 +19,6 @@ exports.index = function(req, res, next){
 	var pathname = url.parse(req.url).pathname;
 	//单页显示文章数量
 	var limit = 15;
-	console.log(req.session);
 	var render = function (articles, pages){
 		res.render('index', {
 			articles: articles,
