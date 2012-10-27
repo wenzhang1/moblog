@@ -196,7 +196,6 @@ exports.article_edit = function(req, res, next){
 							}
 						}
 					}
-					console.log(article.content);
 					res.render('article_edit', {action: 'article_edit', article_id: article._id, title: article.title, content: article.content, tags: all_tags});
 				})
 			}else{
