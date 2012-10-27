@@ -174,6 +174,7 @@ function get_reply_by_query_once(where, cb){
 			if(err) return cb(err);
 			
 			reply.author = user;
+			reply.reply_content = Util.xss(reply.reply_content);
 			reply.reply_time = Util.format_date(reply.reply_at);
 			
 			return cb(err, reply);
@@ -222,6 +223,7 @@ function get_reply_by_query(where, opt, cb){
 					
 					replies[i].author = user;
 					replies[i].reply_time = Util.format_date(replies[i].reply_at);
+					replies[i].reply_content = Util.xss(replies[i].reply_content);
 					
 					proxy.trigger('reply_find');
 				});

@@ -155,6 +155,7 @@ exports.article_view = function(req, res, next){
 		article.author = author;
 		article.edit = edit;
 		article.tags = tags;
+		article.content = Util.xss(article.content);
 		article.replies = replies;
 		article.create_at = Util.format_date(article.create_time);
 		article.update_time = Util.format_date(article.update_at);
@@ -195,7 +196,7 @@ exports.article_edit = function(req, res, next){
 							}
 						}
 					}
-					
+					console.log(article.content);
 					res.render('article_edit', {action: 'article_edit', article_id: article._id, title: article.title, content: article.content, tags: all_tags});
 				})
 			}else{

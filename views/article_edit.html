@@ -90,10 +90,19 @@
             editor = K.create('#content',{
             	items : ['source', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
 						'code', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
-						'insertunorderedlist', '|', 'emoticons', 'image', 'link', 'preview']
+						'insertunorderedlist', '|', 'emoticons', 'image', 'link', 'preview'],
+		 		afterCreate: function(){
+		            this.sync();
+		         },
+		         afterChange: function(){
+		            this.sync();
+		         },
+		         afterBlur: function(){
+		            this.sync();
+		         },
             });
     });
-    
+
     $(function(){
     	$('.tag_box').click(function(){
     		$(this).toggleClass('active');

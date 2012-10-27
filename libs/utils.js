@@ -1,3 +1,5 @@
+var xss = require('xss');
+
 exports.format_date = function (date) {
   var year = date.getFullYear();
   var month = date.getMonth() + 1;
@@ -25,3 +27,7 @@ exports.article_tran = function(a_array){
 		a_array[i].content = a_array[i].content.concat("......");
 	}
 }
+
+exports.xss = function (html) {
+  return xss(html);
+};
