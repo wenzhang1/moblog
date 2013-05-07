@@ -21,3 +21,5 @@ http://moblog.cnodejs.net/
 修复删除最后一个评论，出现不能向上寻找评论的错误
 
 完成NAE部署
+
+webstorm
