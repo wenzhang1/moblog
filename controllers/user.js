@@ -395,11 +395,7 @@ exports.auth_user = function(req,res,next){
     User.findOne({_id:user_id},function(err,user){
       if(err) return next(err);
       if(user){
-     	if(config.admins[user.user_name]){
-      		user.is_admin = true;
-  	  	}else{
-    		user.is_admin = false;
-　		}
+          user.is_admin = config.admins[user.user_name] ? true : false;
       req.session.user = user;
       req.session.cookie.maxAge = 1000 * 60 * 60;
       res.local('current_user',req.session.user);

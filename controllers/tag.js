@@ -145,7 +145,7 @@ exports.tag_create = function(req, res, next){
 				return;
 			}
 			
-			Tag.find({name: name},　function(err, tags){
+			Tag.find({name: name},function(err, tags){
 				if(err) return next(err);
 				
 				if(tags.length>0){

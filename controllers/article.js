@@ -27,7 +27,7 @@ exports.article_create = function(req, res, next){
     if(method == 'get'){
     	var render = function(tags){
     		res.render('article_edit', {
-    			tags: tags,
+    			tags: tags
     		});
     		return;
     	}
@@ -77,7 +77,7 @@ exports.article_create = function(req, res, next){
 					}
 				}
 				
-				res.render('article_edit', {error: '内容不能为空',　title: title, tags: tags});
+				res.render('article_edit', {error: '内容不能为空',title: title, tags: tags});
 				return;
 			});
 		}else{

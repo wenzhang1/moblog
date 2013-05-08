@@ -45,7 +45,7 @@ exports.uploadImg = function(req, res, next){
 		  }
 		  var url = '/upload/' + uid + '/' + encodeURIComponent(filename);
 		  
-		  res.send({error: '0',　url: url}, {"Content-Type": "text/html"});
+		  res.send({error: '0',url: url}, {"Content-Type": "text/html"});
 	    });
   	});
 }
