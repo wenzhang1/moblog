@@ -23,5 +23,3 @@ http://moblog.cnodejs.net/
 完成NAE部署
 
 上传gitcafe
-
-测试phpstorm+1
