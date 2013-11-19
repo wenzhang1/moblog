@@ -24,4 +24,4 @@ http://moblog.cnodejs.net/
 
 上传gitcafe
 
-Mac 测试一下
+测试
