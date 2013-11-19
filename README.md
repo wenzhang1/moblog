@@ -22,6 +22,6 @@ http://moblog.cnodejs.net/
 
 完成NAE部署
 
-上传gitcafe
+移除gitcafe
 
 测试 mac
