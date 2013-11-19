@@ -23,3 +23,5 @@ http://moblog.cnodejs.net/
 完成NAE部署
 
 上传gitcafe
+
+Mac 测试一下

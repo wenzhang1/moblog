@@ -1,3 +1,6 @@
 .project
 public/upload
 .naeindex
+.settings
+.idea
+.DS_Store
